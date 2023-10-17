@@ -1,14 +1,16 @@
-# Compiled class file
-*.class
+target/
+!.mvn/wrapper/maven-wrapper.jar
+!**/src/main/**/target/
+!**/src/test/**/target/
 
-# Log file
-*.log
-
-# Mobile Tools for Java (J2ME)
-.mtj.tmp/
-
-#.idea folder
+# IntelliJ project files
 .idea
+*.iml
+*.ipr
+*.iws
+
+# VS Code project files
+.vscode/
 
 # Package Files #
 *.jar
