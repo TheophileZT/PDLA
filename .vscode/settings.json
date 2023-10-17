@@ -1,0 +1,17 @@
+{
+    "sqltools.connections": [
+        {
+            "mysqlOptions": {
+                "authProtocol": "default",
+                "enableSsl": "Disabled"
+            },
+            "previewLimit": 50,
+            "server": "srv-bdens.insa-toulouse.fr",
+            "port": 3306,
+            "driver": "MySQL",
+            "name": "PDLA",
+            "database": "projet_gei_011",
+            "username": "projet_gei_011"
+        }
+    ]
+}
