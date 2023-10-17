@@ -13,5 +13,6 @@
             "database": "projet_gei_011",
             "username": "projet_gei_011"
         }
-    ]
+    ],
+    "java.configuration.updateBuildConfiguration": "interactive"
 }
