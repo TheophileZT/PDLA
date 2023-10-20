@@ -1,7 +1,5 @@
 package view;
 import javax.swing.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.util.Arrays;
 import java.util.Objects;
 
@@ -29,12 +27,7 @@ public class Vue {
         frame.setVisible(true);
 
         //ouverture du formulaire d'inscription
-        buttonSignUp.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent actionEvent) {
-                createAndShowSignUpForm();
-            }
-        });
+        buttonSignUp.addActionListener(actionEvent -> createAndShowSignUpForm());
     }
 
     private static void createAndShowSignUpForm() {
@@ -83,58 +76,41 @@ public class Vue {
         formPanel.add(confirmPasswordField);
 
         //Add event listeners.
-        checkBoxIsNeeder.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent actionEvent) {
-                if (checkBoxIsNeeder.isSelected()) {
-                    checkBoxIsVolunteer.setSelected(false);
-                    checkBoxIsValidator.setSelected(false);
-                }
+        checkBoxIsNeeder.addActionListener(actionEvent -> {
+            if (checkBoxIsNeeder.isSelected()) {
+                checkBoxIsVolunteer.setSelected(false);
+                checkBoxIsValidator.setSelected(false);
             }
         });
 
-        checkBoxIsVolunteer.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent actionEvent) {
-                if (checkBoxIsVolunteer.isSelected()) {
-                    checkBoxIsNeeder.setSelected(false);
-                    checkBoxIsValidator.setSelected(false);
-                }
+        checkBoxIsVolunteer.addActionListener(actionEvent -> {
+            if (checkBoxIsVolunteer.isSelected()) {
+                checkBoxIsNeeder.setSelected(false);
+                checkBoxIsValidator.setSelected(false);
             }
         });
 
-        checkBoxIsValidator.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent actionEvent) {
-                if (checkBoxIsValidator.isSelected()) {
-                    checkBoxIsNeeder.setSelected(false);
-                    checkBoxIsVolunteer.setSelected(false);
-                }
+        checkBoxIsValidator.addActionListener(actionEvent -> {
+            if (checkBoxIsValidator.isSelected()) {
+                checkBoxIsNeeder.setSelected(false);
+                checkBoxIsVolunteer.setSelected(false);
             }
         });
 
-        confirmPasswordField.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent actionEvent) {
-                if (!Objects.equals(Arrays.toString(passwordField.getPassword()), Arrays.toString(confirmPasswordField.getPassword()))) {
-                    JOptionPane.showMessageDialog(frame, "Passwords don't match");
-                }
+        confirmPasswordField.addActionListener(actionEvent -> {
+            if (!Objects.equals(Arrays.toString(passwordField.getPassword()), Arrays.toString(confirmPasswordField.getPassword()))) {
+                JOptionPane.showMessageDialog(frame, "Passwords don't match");
             }
         });
 
-        validateButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent actionEvent) {
-                Controller.createNewUser(labelTitle.getText(),
-                        textFieldName.getText(),
-                        textFieldEmail.getText(),
-                        Arrays.toString(passwordField.getPassword()),
-                        checkBoxIsNeeder.isSelected(),
-                        checkBoxIsVolunteer.isSelected(),
-                        checkBoxIsValidator.isSelected()
-                );
-            }
-        });
+        validateButton.addActionListener(actionEvent -> Controller.createNewUser(labelTitle.getText(),
+                textFieldName.getText(),
+                textFieldEmail.getText(),
+                Arrays.toString(passwordField.getPassword()),
+                checkBoxIsNeeder.isSelected(),
+                checkBoxIsVolunteer.isSelected(),
+                checkBoxIsValidator.isSelected()
+        ));
 
 
 
