@@ -1,4 +1,4 @@
-package org.example;
+package model;
 
 /**
  * Unit test for simple App.
