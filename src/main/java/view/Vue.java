@@ -124,9 +124,42 @@ public class Vue {
                 checkBoxIsValidator.isSelected()
         ));
 
+        validateButton.addActionListener(actionEvent -> frame.dispose());
+
 
 
         //Display the window.
         frame.setVisible(true);
+    }
+
+    private static void createAndShowLogInForm() {
+        JFrame frame = new JFrame("LogInFrame");
+        frame.setSize(900, 600);
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+
+        // Create all the components.
+        JPanel formPanel = new JPanel();
+        JLabel labelTitle = new JLabel("Log In", JLabel.CENTER);
+        JLabel emailLabel = new JLabel("Email");
+        JTextField emailTextField = new JTextField();
+        JLabel passwordLabel = new JLabel("Password");
+        JPasswordField passwordField = new JPasswordField();
+        JButton connectButton = new JButton("Connection");
+
+        // Set the components properties.
+        labelTitle.setFont(labelTitle.getFont().deriveFont(20.0f));
+        formPanel.setLayout(new BoxLayout(formPanel, BoxLayout.Y_AXIS));
+        frame.getContentPane().add(formPanel, "North");
+        frame.getContentPane().add(connectButton, "South");
+
+        // Add the components to the panel.
+        formPanel.add(labelTitle);
+        formPanel.add(emailLabel);
+        formPanel.add(emailTextField);
+        formPanel.add(passwordLabel);
+
+        // Add event listeners.
+        connectButton.addActionListener(actionEvent -> Controller.logIn(emailTextField.getText(), passwordField.getPassword()));
+
     }
 }
