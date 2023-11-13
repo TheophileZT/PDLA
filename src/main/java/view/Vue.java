@@ -1,5 +1,6 @@
 package view;
 import javax.swing.*;
+import java.sql.SQLException;
 import java.util.Arrays;
 import java.util.Objects;
 
@@ -38,9 +39,12 @@ public class Vue {
         //Create all the components.
         JPanel typePanel = new JPanel();
         JPanel formPanel = new JPanel();
+        JPanel namePanel = new JPanel();
         JLabel labelTitle = new JLabel("Sign Up", JLabel.CENTER);
-        JLabel labelName = new JLabel("Name");
-        JTextField textFieldName = new JTextField();
+        JLabel labelFirstName = new JLabel("First Name");
+        JTextField textFieldFirstName = new JTextField();
+        JLabel labelLastName = new JLabel("Last Name");
+        JTextField textFieldLastName = new JTextField();
         JLabel labelEmail = new JLabel("Email");
         JTextField textFieldEmail = new JTextField();
         JLabel labelPassword = new JLabel("Password");
@@ -58,15 +62,24 @@ public class Vue {
         formPanel.setLayout(new BoxLayout(formPanel, BoxLayout.Y_AXIS));
         frame.getContentPane().add(formPanel, "North");
         frame.getContentPane().add(validateButton, "South");
+        namePanel.setLayout(new BoxLayout(namePanel, BoxLayout.X_AXIS));
+        labelFirstName.setBorder(BorderFactory.createEmptyBorder(0, 0, 0, 10));
+        labelLastName.setBorder(BorderFactory.createEmptyBorder(0, 0, 0, 10));
+
 
         //Add the components to the panel.
         typePanel.add(checkBoxIsNeeder);
         typePanel.add(checkBoxIsVolunteer);
         typePanel.add(checkBoxIsValidator);
 
+        namePanel.add(labelFirstName);
+        namePanel.add(textFieldFirstName);
+        namePanel.add(labelLastName);
+        namePanel.add(textFieldLastName);
+
+
         formPanel.add(labelTitle);
-        formPanel.add(labelName);
-        formPanel.add(textFieldName);
+        formPanel.add(namePanel);
         formPanel.add(typePanel);
         formPanel.add(labelEmail);
         formPanel.add(textFieldEmail);
@@ -103,51 +116,24 @@ public class Vue {
             }
         });
 
-        validateButton.addActionListener(actionEvent -> Controller.createNewUser(labelTitle.getText(),
-                textFieldName.getText(),
-                textFieldEmail.getText(),
-                Arrays.toString(passwordField.getPassword()),
-                checkBoxIsNeeder.isSelected(),
-                checkBoxIsVolunteer.isSelected(),
-                checkBoxIsValidator.isSelected()
-        ));
-
-        validateButton.addActionListener(actionEvent -> frame.dispose());
+        validateButton.addActionListener(actionEvent -> {
+            try {
+                Controller.createNewUser(textFieldFirstName.getText(),
+                        textFieldLastName.getText(),
+                        textFieldEmail.getText(),
+                        Arrays.toString(passwordField.getPassword()),
+                        checkBoxIsNeeder.isSelected(),
+                        checkBoxIsVolunteer.isSelected(),
+                        checkBoxIsValidator.isSelected()
+                );
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
+            }
+        });
 
 
 
         //Display the window.
         frame.setVisible(true);
-    }
-
-    private static void createAndShowLogInForm() {
-        JFrame frame = new JFrame("LogInFrame");
-        frame.setSize(900, 600);
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-
-        // Create all the components.
-        JPanel formPanel = new JPanel();
-        JLabel labelTitle = new JLabel("Log In", JLabel.CENTER);
-        JLabel emailLabel = new JLabel("Email");
-        JTextField emailTextField = new JTextField();
-        JLabel passwordLabel = new JLabel("Password");
-        JPasswordField passwordField = new JPasswordField();
-        JButton connectButton = new JButton("Connection");
-
-        // Set the components properties.
-        labelTitle.setFont(labelTitle.getFont().deriveFont(20.0f));
-        formPanel.setLayout(new BoxLayout(formPanel, BoxLayout.Y_AXIS));
-        frame.getContentPane().add(formPanel, "North");
-        frame.getContentPane().add(connectButton, "South");
-
-        // Add the components to the panel.
-        formPanel.add(labelTitle);
-        formPanel.add(emailLabel);
-        formPanel.add(emailTextField);
-        formPanel.add(passwordLabel);
-
-        // Add event listeners.
-        connectButton.addActionListener(actionEvent -> Controller.logIn(emailTextField.getText(), passwordField.getPassword()));
-
     }
 }

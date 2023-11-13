@@ -1,20 +1,21 @@
 package controller;
 import java.sql.*;
+import java.util.Arrays;
 
 public class Controller {
-    Class.forName("com.mysql.jdbc.Driver");
-    Connection connect = DriverManager.getConnection("srv-bdens.insa-toulouse.fr", "projet_gei_011", "shu6AeNg");
-    Statement state = connect.createStatement();
 
-    public static int logIn(String email char[] password) {
+    static SingletonBDD bdd = SingletonBDD.getInstance();
+
+    public static int logIn(String email, char[] password) {
         int logStatus = 0;
-        String loginAttempt = "EXISTS (SELECT * FROM USER WHERE Email = " + email + " AND Password = " + password + ")";
+        String loginAttempt = "EXISTS (SELECT * FROM USER WHERE Email = " + email + " AND Password = " + Arrays.toString(password) + ")";
+        return logStatus;
     }
-    public static int createNewUser(String firstName, String lastName, String email, String password, boolean isNeeder, boolean isVolunteer, boolean isValidator) {
+    public static int createNewUser(String firstName, String lastName, String email, String password, boolean isNeeder, boolean isVolunteer, boolean isValidator) throws SQLException {
         String createUserAttempt = "EXISTS (SELECT * FROM USER WHERE EMAIL = " + email + ")";
-        ResultSet userExists = state.executeQuery(createUserAttempt);
+        ResultSet userExists = bdd.state.executeQuery(createUserAttempt);
         if (userExists != null){
-            system.out.println("User already exists");
+            System.out.println("User already exists");
             return 1;
         }
         String userType = "";
@@ -26,9 +27,8 @@ public class Controller {
             userType = "Validator";
         }
         String userCreationQuery = "INSERT INTO USER (FirstName, LastName, Email, Password, UserType) VALUES (" + firstName + ", " + lastName + ", " + email + ", " + password + ", " + userType + ")";
-        ResultSet userCreation = state.executeQuery(userCreationQuery);
+        ResultSet userCreation = bdd.state.executeQuery(userCreationQuery);
         return 0;
-
 
     }
 }
