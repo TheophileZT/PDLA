@@ -6,7 +6,7 @@ CREATE TABLE IF NOT EXISTS USER(
     BirthDate DATETIME NOT NULL,
     Email VARCHAR(45) NOT NULL UNIQUE,
     UserType ENUM('Helper','Validator','Needer'),
-    Password VARCHAR(45) NOT NULL,
+    Password VARCHAR(45) NOT NULL
 );
 
 CREATE TABLE IF NOT EXISTS MISSIONS(
