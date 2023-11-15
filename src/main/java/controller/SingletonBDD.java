@@ -12,21 +12,19 @@ public class SingletonBDD {
     String password = "shu6AeNg";
 
     private static SingletonBDD instance = null;
-    Statement state;
-    private SingletonBDD(){
-        Connection connection = createConnection();
-    }
-
-    public Connection createConnection() {
-        Connection connection = null;
+    Statement state = null;
+    Connection conn = null;
+    
+    private Connection createConnection() {
         try {
             // Load the JDBC driver
-            Class<?> driver_class = Class.forName("com.mysql.jdbc.Driver");
-            connection = DriverManager.getConnection(url, user, password);
+            Class.forName("com.mysql.jdbc.Driver");
+            conn = DriverManager.getConnection(url, user, password);
+            state = conn.createStatement();
         } catch (ClassNotFoundException | SQLException e) {
             e.printStackTrace();
         }
-        return connection;
+        return conn;
     }
 
     public static SingletonBDD getInstance() {

@@ -1,34 +1,62 @@
 package controller;
-import java.sql.*;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.Arrays;
 
 public class Controller {
 
     static SingletonBDD bdd = SingletonBDD.getInstance();
 
-    public static int logIn(String email, char[] password) {
-        int logStatus = 0;
-        String loginAttempt = "EXISTS (SELECT * FROM USER WHERE Email = " + email + " AND Password = " + Arrays.toString(password) + ")";
+    public static String logIn(String email, char[] password) {
+        String logStatus = "";
+        try {
+            String login_request = "EXISTS (SELECT * FROM USER WHERE Email = " + email + " AND Password = " + Arrays.toString(password) + ")";
+            ResultSet login = bdd.state.executeQuery(login_request);
+            if (login != null) {
+                logStatus = "Login successful";
+            } else {
+                logStatus = "Login failed";
+            }
+        }
+        catch (SQLException e) {
+            e.printStackTrace();
+        }
+
         return logStatus;
     }
-    public static int createNewUser(String firstName, String lastName, String email, String password, boolean isNeeder, boolean isVolunteer, boolean isValidator) throws SQLException {
-        String createUserAttempt = "EXISTS (SELECT * FROM USER WHERE EMAIL = " + email + ")";
-        ResultSet userExists = bdd.state.executeQuery(createUserAttempt);
-        if (userExists != null){
-            System.out.println("User already exists");
-            return 1;
+    public static String createNewUser(String firstName, String lastName, String BirthDate, String email, String password, boolean isNeeder, boolean isVolunteer, boolean isValidator) throws SQLException {
+        String userCreationStatus = "";
+        try{
+            String createUserAttempt = "EXISTS (SELECT * FROM USER WHERE EMAIL = " + email + ")";
+            ResultSet userExists = bdd.state.executeQuery(createUserAttempt);
+            if (userExists != null){
+                userCreationStatus = "User already exists";
+                return userCreationStatus;
+            }
+            String userType = "";
+            if (isNeeder) {
+                userType = "Needer";
+            } else if (isVolunteer) {
+                userType = "Volunteer";
+            } else if (isValidator) {
+                userType = "Validator";
+            }
+            String userCreationQuery = "INSERT INTO USER (FirstName, LastName, Email, UserType, Password) VALUES (?, ?, ?, ?, ?)";
+            PreparedStatement preparedStatement = bdd.conn.prepareStatement(userCreationQuery);
+            preparedStatement.setString(1, firstName);
+            preparedStatement.setString(2, lastName);
+            preparedStatement.setString(3, email);
+            //BirthDate not implemented yet
+            preparedStatement.setString(4, userType);
+            preparedStatement.setString(5, password);
+            preparedStatement.executeUpdate();
+            userCreationStatus = "User sucessfully created";
         }
-        String userType = "";
-        if (isNeeder) {
-            userType = "Needer";
-        } else if (isVolunteer) {
-            userType = "Volunteer";
-        } else if (isValidator) {
-            userType = "Validator";
+        catch (SQLException e){
+            e.printStackTrace();
         }
-        String userCreationQuery = "INSERT INTO USER (FirstName, LastName, Email, Password, UserType) VALUES (" + firstName + ", " + lastName + ", " + email + ", " + password + ", " + userType + ")";
-        ResultSet userCreation = bdd.state.executeQuery(userCreationQuery);
-        return 0;
-
+        
+        return userCreationStatus;
     }
 }
