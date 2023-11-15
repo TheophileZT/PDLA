@@ -120,6 +120,7 @@ public class Vue {
             try {
                 Controller.createNewUser(textFieldFirstName.getText(),
                         textFieldLastName.getText(),
+                        null,
                         textFieldEmail.getText(),
                         Arrays.toString(passwordField.getPassword()),
                         checkBoxIsNeeder.isSelected(),
