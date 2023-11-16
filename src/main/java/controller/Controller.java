@@ -28,9 +28,9 @@ public class Controller {
     public static String createNewUser(String firstName, String lastName, String BirthDate, String email, String password, boolean isNeeder, boolean isVolunteer, boolean isValidator) throws SQLException {
         String userCreationStatus = "";
         try{
-            String createUserAttempt = "SELECT * FROM USER WHERE EMAIL = '" + email + "'";
+            String createUserAttempt = "SELECT IdUser FROM USER WHERE EMAIL = '" + email + "'";
             ResultSet userExists = bdd.state.executeQuery(createUserAttempt);
-            if (userExists != null){
+            if (userExists.next()){
                 userCreationStatus = "User already exists";
                 System.out.println("User already exists");
                 return userCreationStatus;
@@ -43,7 +43,7 @@ public class Controller {
             } else if (isValidator) {
                 userType = "Validator";
             }
-            String userCreationQuery = "INSERT INTO USER (FirstName, LastName, Email, UserType, Password) VALUES (?, ?, ?, ?, ?)";
+            String userCreationQuery = "INSERT INTO USER (UserFirstName, UserLastName, Email, UserType, Password) VALUES (?, ?, ?, ?, ?)";
             PreparedStatement preparedStatement = bdd.conn.prepareStatement(userCreationQuery);
             preparedStatement.setString(1, firstName);
             preparedStatement.setString(2, lastName);
