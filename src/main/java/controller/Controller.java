@@ -28,10 +28,11 @@ public class Controller {
     public static String createNewUser(String firstName, String lastName, String BirthDate, String email, String password, boolean isNeeder, boolean isVolunteer, boolean isValidator) throws SQLException {
         String userCreationStatus = "";
         try{
-            String createUserAttempt = "EXISTS (SELECT * FROM USER WHERE EMAIL = " + email + ")";
+            String createUserAttempt = "SELECT * FROM USER WHERE EMAIL = '" + email + "'";
             ResultSet userExists = bdd.state.executeQuery(createUserAttempt);
             if (userExists != null){
                 userCreationStatus = "User already exists";
+                System.out.println("User already exists");
                 return userCreationStatus;
             }
             String userType = "";
@@ -52,6 +53,7 @@ public class Controller {
             preparedStatement.setString(5, password);
             preparedStatement.executeUpdate();
             userCreationStatus = "User sucessfully created";
+            System.out.println("User created");
         }
         catch (SQLException e){
             e.printStackTrace();

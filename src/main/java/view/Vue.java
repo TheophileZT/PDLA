@@ -116,9 +116,9 @@ public class Vue {
             }
         });
 
-        validateButton.addActionListener(actionEvent -> {
+        validateButton.addActionListener( actionEvent -> {
             try {
-                Controller.createNewUser(textFieldFirstName.getText(),
+                String ret = Controller.createNewUser(textFieldFirstName.getText(),
                         textFieldLastName.getText(),
                         null,
                         textFieldEmail.getText(),
@@ -127,6 +127,7 @@ public class Vue {
                         checkBoxIsVolunteer.isSelected(),
                         checkBoxIsValidator.isSelected()
                 );
+                JOptionPane.showMessageDialog(frame, ret);
             } catch (SQLException e) {
                 throw new RuntimeException(e);
             }

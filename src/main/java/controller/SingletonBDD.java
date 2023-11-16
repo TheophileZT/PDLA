@@ -7,7 +7,7 @@ import java.sql.Statement;
 
 public class SingletonBDD {
 
-    String url = "jdbc:mysql://srv-bdens.insa-toulouse.fr:3306/";
+    String url = "jdbc:mysql://srv-bdens.insa-toulouse.fr:3306/projet_gei_011";
     String user = "projet_gei_011";
     String password = "shu6AeNg";
 
