@@ -25,7 +25,7 @@ public class Controller {
 
         return logStatus;
     }
-    public static String createNewUser(String firstName, String lastName, String BirthDate, String email, String password, boolean isNeeder, boolean isVolunteer, boolean isValidator) throws SQLException {
+    public static String createNewUser(String firstName, String lastName, String BirthDate, String email, String password, boolean isNeeder, boolean isHelper, boolean isValidator) throws SQLException {
         String userCreationStatus = "";
         try{
             String createUserAttempt = "SELECT IdUser FROM USER WHERE EMAIL = '" + email + "'";
@@ -38,8 +38,8 @@ public class Controller {
             String userType = "";
             if (isNeeder) {
                 userType = "Needer";
-            } else if (isVolunteer) {
-                userType = "Volunteer";
+            } else if (isHelper) {
+                userType = "Helper";
             } else if (isValidator) {
                 userType = "Validator";
             }
