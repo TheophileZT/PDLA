@@ -2,18 +2,17 @@ package controller;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.Arrays;
 
 public class Controller {
 
     static SingletonBDD bdd = SingletonBDD.getInstance();
 
-    public static String[] logIn(String email, char[] password) throws SQLException {
+    public static String[] logIn(String email, String password) throws SQLException {
         String logStatus = "";
         String userType = "Not defined";
         ResultSet login = getUserData(email);
         if (login.next()) {
-            if (Arrays.equals(password, login.getString("Password").toCharArray())) {
+            if (login.getString("Password").equals(password)) {
                 logStatus = "Login successful";
                 userType = login.getString("UserType");
             }
