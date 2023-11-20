@@ -1,6 +1,6 @@
 package model;
 
-import view.Vue;
+import view.ViewStart;
 
 
 /**
@@ -10,7 +10,7 @@ import view.Vue;
 public class App 
 {
     public static void main( String[] args ) {
-        Vue.createAndShowGui();
+        ViewStart.create();
 
     }
 }
