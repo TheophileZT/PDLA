@@ -3,49 +3,48 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Arrays;
-import java.util.HashMap;
 
 public class Controller {
 
     static SingletonBDD bdd = SingletonBDD.getInstance();
 
-    public static String logIn(String email, char[] password) {
+    public static String[] logIn(String email, char[] password) throws SQLException {
         String logStatus = "";
-        try {
-            String login_request = "SELECT * FROM USER WHERE Email = '" + email + "'' AND Password = '" + Arrays.toString(password) + "'";
-            ResultSet login = bdd.state.executeQuery(login_request);
-            if (login.next()) {
-                
+        String userType = "Not defined";
+        ResultSet login = getUserData(email);
+        if (login.next()) {
+            if (Arrays.equals(password, login.getString("Password").toCharArray())) {
                 logStatus = "Login successful";
-            } else {
-                logStatus = "Login failed";
+                userType = login.getString("UserType");
             }
+            else {
+                logStatus = "Login failed : wrong password";
+            }
+        } else {
+            logStatus = "Login failed : no user registered with this email";
         }
-        catch (SQLException e) {
-            e.printStackTrace();
-        }
-
-        return logStatus;
+        String[] logStatusAndUserType = new String[2];
+        logStatusAndUserType[0] = logStatus;
+        logStatusAndUserType[1] = userType;
+        return logStatusAndUserType;
     }
-    public static String createNewUser(String firstName, String lastName, String BirthDate, String email, String password, boolean isNeeder, boolean isHelper, boolean isValidator) throws SQLException {
-        HashMap<ResultSet, Boolean> user_to_create = getUserData(email);
+    
+    public static String createNewUser(String firstName, String lastName, String BirthDate, String email, String password, boolean isNeeder, boolean isHelper, boolean isValidator) throws SQLException{
         String userCreationStatus = "";
-        try{
-            String createUserAttempt = "SELECT * FROM USER WHERE EMAIL = '" + email + "'";
-            ResultSet userExists = bdd.state.executeQuery(createUserAttempt);
-            if (userExists.next()){
-                userCreationStatus = "User already exists";
-                System.out.println("User already exists");
-                return userCreationStatus;
-            }
-            String userType = "";
-            if (isNeeder) {
-                userType = "Needer";
-            } else if (isHelper) {
-                userType = "Helper";
-            } else if (isValidator) {
-                userType = "Validator";
-            }
+        ResultSet userExists = getUserData(email);
+        if (userExists.next()){
+            userCreationStatus = "User already exists";
+            return userCreationStatus;
+        }
+        String userType = "";
+        if (isNeeder) {
+            userType = "Needer";
+        } else if (isHelper) {
+            userType = "Helper";
+        } else if (isValidator) {
+            userType = "Validator";
+        }
+        try {
             String userCreationQuery = "INSERT INTO USER (UserFirstName, UserLastName, Email, UserType, Password) VALUES (?, ?, ?, ?, ?)";
             PreparedStatement preparedStatement = bdd.conn.prepareStatement(userCreationQuery);
             preparedStatement.setString(1, firstName);
@@ -56,30 +55,22 @@ public class Controller {
             preparedStatement.setString(5, password);
             preparedStatement.executeUpdate();
             userCreationStatus = "User sucessfully created";
-            System.out.println("User created");
-        }
-        catch (SQLException e){
+        } catch (SQLException e) {
             e.printStackTrace();
+            userCreationStatus = "User creation failed";
         }
-        
         return userCreationStatus;
     }
-    public static HashMap<ResultSet, Boolean> getUserData(String email) {
-        boolean userExists = false;
+
+    public static ResultSet getUserData(String email) {
         ResultSet User = null;
-        
         try {
             String getUserRequest = "SELECT * FROM USER WHERE Email = '" + email + "'";
             User = bdd.state.executeQuery(getUserRequest);
-            if (User.next()) {
-                userExists = true;
-            }
         }
         catch (SQLException e) {
             e.printStackTrace();
         }
-        HashMap<ResultSet, Boolean> userData = new HashMap<ResultSet, Boolean>();
-        userData.put(User, userExists);
-        return userData;
+        return User;
     }
 }
