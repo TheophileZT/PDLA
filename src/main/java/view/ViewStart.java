@@ -25,12 +25,12 @@ public class ViewStart {
 
         //ouverture du formulaire d'inscription
         buttonSignUp.addActionListener(actionEvent -> {
-            SignUp.create();
+            SignUpView.create();
             frame.dispose();
         });
 
         buttonLogIn.addActionListener(actionEvent -> {
-            LogIn.create();
+            LogInView.create();
             frame.dispose();
         });
     }

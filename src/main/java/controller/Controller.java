@@ -10,11 +10,13 @@ public class Controller {
     public static String[] logIn(String email, String password) throws SQLException {
         String logStatus = "";
         String userType = "Not defined";
+        String idUser = "";
         ResultSet login = getUserData(email);
         if (login.next()) {
             if (login.getString("Password").equals(password)) {
                 logStatus = "Login successful";
                 userType = login.getString("UserType");
+                idUser = login.getString("IdUser");
             }
             else {
                 logStatus = "Login failed : wrong password";
@@ -22,10 +24,11 @@ public class Controller {
         } else {
             logStatus = "Login failed : no user registered with this email";
         }
-        String[] logStatusAndUserType = new String[2];
-        logStatusAndUserType[0] = logStatus;
-        logStatusAndUserType[1] = userType;
-        return logStatusAndUserType;
+        String[] logStatusAndUser = new String[2];
+        logStatusAndUser[0] = logStatus;
+        logStatusAndUser[1] = userType;
+        logStatusAndUser[2] = idUser;
+        return logStatusAndUser;
     }
     
     public static String createNewUser(String firstName, String lastName, String BirthDate, String email, String password, boolean isNeeder, boolean isHelper, boolean isValidator) throws SQLException{
@@ -71,5 +74,24 @@ public class Controller {
             e.printStackTrace();
         }
         return User;
+    }
+
+    public static String createNewMission(String title, String description, String date, int idUser) {
+        String missionCreationStatus = "";
+
+        try {
+            String missionCreationQuery = "INSERT INTO MISSION (Title, Description, Date, IdUser) VALUES (?, ?, ?, ?)";
+            PreparedStatement preparedStatement = bdd.conn.prepareStatement(missionCreationQuery);
+            preparedStatement.setString(1, title);
+            preparedStatement.setString(2, description);
+            preparedStatement.setString(3, date);
+            preparedStatement.setInt(4, idUser);
+            preparedStatement.executeUpdate();
+            missionCreationStatus = "Mission sucessfully created";
+        } catch (SQLException e) {
+            e.printStackTrace();
+            missionCreationStatus = "Mission creation failed";
+        }
+        return missionCreationStatus;
     }
 }

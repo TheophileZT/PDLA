@@ -6,7 +6,7 @@ import javax.swing.*;
 import java.sql.SQLException;
 import java.util.Arrays;
 
-public class LogIn {
+public class LogInView {
 
     public static void create() {
         //Create and set up the window.
@@ -52,7 +52,7 @@ public class LogIn {
                         if (ret[0].equals("Login successful")) {
                             frame.dispose();
                             switch (ret[1]) {
-                                case "Needer" -> ViewNeeder.create();
+                                case "Needer" -> ViewNeeder.create(Integer.parseInt(ret[2]));
                                 case "Helper" -> ViewHelper.create();
                                 case "Validator" -> ViewValidator.create();
                             }

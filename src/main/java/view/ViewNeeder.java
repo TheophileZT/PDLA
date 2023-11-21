@@ -4,7 +4,7 @@ import javax.swing.*;
 import java.awt.*;
 
 public class ViewNeeder {
-    public static void create() {
+    public static void create(int idUser) {
 
         JFrame frame = new JFrame("NeederFrame");
         frame.setSize(900, 600);
@@ -25,6 +25,11 @@ public class ViewNeeder {
         mainPanel.add(missionPanel, BorderLayout.CENTER);
         topPanel.add(labelTitle);
         topPanel.add(buttonAddMission);
+
+        buttonAddMission.addActionListener(e -> {
+            MissionView.add(idUser);
+
+        });
 
         frame.setVisible(true);
     }

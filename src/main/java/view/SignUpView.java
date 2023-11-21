@@ -7,7 +7,7 @@ import java.sql.SQLException;
 import java.util.Arrays;
 import java.util.Objects;
 
-public class SignUp {
+public class SignUpView {
     public static void create() {
         JFrame frame = new JFrame("SignUpFrame");
         frame.setSize(900, 600);
@@ -104,7 +104,15 @@ public class SignUp {
                         checkBoxIsVolunteer.isSelected(),
                         checkBoxIsValidator.isSelected()
                 );
-                JOptionPane.showMessageDialog(frame, ret);
+                if (ret.equals("User created")) {
+                    JOptionPane.showMessageDialog(frame, ret);
+                    frame.dispose();
+                    LogInView.create();
+                } else if (ret.equals("User already exists")) {
+                    JOptionPane.showMessageDialog(frame, "Travel to Login Page", ret,1);
+                    frame.dispose();
+                    LogInView.create();
+                }
             } catch (SQLException e) {
                 throw new RuntimeException(e);
             }
