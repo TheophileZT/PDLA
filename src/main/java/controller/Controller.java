@@ -1,7 +1,10 @@
 package controller;
+import model.Mission;
+
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 
 public class Controller {
 
@@ -24,7 +27,7 @@ public class Controller {
         } else {
             logStatus = "Login failed : no user registered with this email";
         }
-        String[] logStatusAndUser = new String[2];
+        String[] logStatusAndUser = new String[3];
         logStatusAndUser[0] = logStatus;
         logStatusAndUser[1] = userType;
         logStatusAndUser[2] = idUser;
@@ -80,7 +83,7 @@ public class Controller {
         String missionCreationStatus = "";
 
         try {
-            String missionCreationQuery = "INSERT INTO MISSION (Title, Description, Date, IdUser) VALUES (?, ?, ?, ?)";
+            String missionCreationQuery = "INSERT INTO MISSIONS (Title, Description, Date, IdNeeder) VALUES (?, ?, ?, ?)";
             PreparedStatement preparedStatement = bdd.conn.prepareStatement(missionCreationQuery);
             preparedStatement.setString(1, title);
             preparedStatement.setString(2, description);
@@ -93,5 +96,21 @@ public class Controller {
             missionCreationStatus = "Mission creation failed";
         }
         return missionCreationStatus;
+    }
+
+    public static ArrayList<Mission> getMissionsOfNeeder(int idNeeder){
+        ArrayList<Mission> missions = new ArrayList<Mission>();
+        try {
+            String getMissionsRequest = "SELECT * FROM MISSIONS WHERE IdNeeder = '" + idNeeder + "'";
+            ResultSet missionsRS = bdd.state.executeQuery(getMissionsRequest);
+            while (missionsRS.next()) {
+                Mission mission = new Mission(missionsRS.getInt("IdMission"), missionsRS.getString("Title"), missionsRS.getString("Description"), missionsRS.getString("Date"), missionsRS.getInt("IdNeeder"), missionsRS.getString("Status"));
+                missions.add(mission);
+            }
+        }
+        catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return missions;
     }
 }

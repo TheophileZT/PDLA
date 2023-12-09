@@ -1,12 +1,16 @@
 package view;
 
+import com.toedter.calendar.JDateChooser;
 import controller.Controller;
 
 import javax.swing.*;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
 
 public class MissionView {
 
-    public static void add(int idUser){
+    public static void add(int idUser) {
         JFrame frame = new JFrame("AddMissionFrame");
         frame.setSize(900, 600);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -17,7 +21,15 @@ public class MissionView {
         JLabel labelDescription = new JLabel("Description", JLabel.CENTER);
         JTextField textFieldDescription = new JTextField();
         JLabel labelDate = new JLabel("Date", JLabel.CENTER);
-        JTextField textFieldDate = new JTextField();
+        JDateChooser date = new JDateChooser();
+        date.setMinSelectableDate(new Date());
+        date.setDateFormatString("yyyy-MM-dd");
+        JLabel labelHour = new JLabel("Time", JLabel.CENTER);
+        SpinnerDateModel spinnerDateModel = new SpinnerDateModel();
+        JSpinner timeSpinner = new JSpinner(spinnerDateModel);
+
+        JSpinner.DateEditor timeEditor = new JSpinner.DateEditor(timeSpinner, "HH:mm:ss");
+        timeSpinner.setEditor(timeEditor);
 
         JButton buttonAddMission = new JButton("add mission");
 
@@ -30,13 +42,33 @@ public class MissionView {
         mainPanel.add(labelDescription);
         mainPanel.add(textFieldDescription);
         mainPanel.add(labelDate);
-        mainPanel.add(textFieldDate);
+        mainPanel.add(date);
+        mainPanel.add(labelHour);
+        mainPanel.add(timeSpinner);
         mainPanel.add(buttonAddMission);
 
         buttonAddMission.addActionListener(e -> {
-            Controller.createNewMission(textFieldTitle.getText(), textFieldDescription.getText(), textFieldDate.getText(), idUser);
+            Date selectedDate = date.getDate();
+            Date selectedTime = (Date) timeSpinner.getValue();
 
+            Calendar calendarDate = Calendar.getInstance();
+            calendarDate.setTime(selectedDate);
+
+            Calendar calendarTime = Calendar.getInstance();
+            calendarTime.setTime(selectedTime);
+
+            calendarDate.set(Calendar.HOUR_OF_DAY, calendarTime.get(Calendar.HOUR_OF_DAY));
+            calendarDate.set(Calendar.MINUTE, calendarTime.get(Calendar.MINUTE));
+            calendarDate.set(Calendar.SECOND, calendarTime.get(Calendar.SECOND));
+
+            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            String dateTime = dateFormat.format(calendarDate.getTime());
+            System.out.println("Selected DateTime: " + dateTime);
+            Controller.createNewMission(textFieldTitle.getText(), textFieldDescription.getText(), dateTime, idUser);
+            frame.dispose();
+            ViewNeeder.create(idUser);
         });
 
+        frame.setVisible(true);
     }
 }
