@@ -3,8 +3,9 @@ package model;
 public enum Status {
     Pending(0),
     Accepted(1),
-    Refused(2),
-    Done(3);
+    Assigned(2),
+    Refused(3),
+    Done(4);
 
     private int value;
 
