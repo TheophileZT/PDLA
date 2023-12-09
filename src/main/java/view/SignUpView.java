@@ -3,17 +3,20 @@ package view;
 import controller.Controller;
 
 import javax.swing.*;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
+import java.awt.*;
 import java.sql.SQLException;
 import java.util.Arrays;
-import java.util.Objects;
 
 public class SignUpView {
+
     public static void create() {
         JFrame frame = new JFrame("SignUpFrame");
-        frame.setSize(900, 600);
+        frame.setExtendedState(JFrame.MAXIMIZED_BOTH); // Mettre en plein écran
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
-        //Create all the components.
+        // Créer tous les composants
         JPanel typePanel = new JPanel();
         JPanel formPanel = new JPanel();
         JPanel namePanel = new JPanel();
@@ -28,23 +31,27 @@ public class SignUpView {
         JPasswordField passwordField = new JPasswordField();
         JLabel labelConfirmPassword = new JLabel("Confirm Password");
         JPasswordField confirmPasswordField = new JPasswordField();
-        JButton validateButton = new JButton("Validate");
+        JButton validateButton = new JButton("Sign Up");
+        JLabel passwordMismatchLabel = new JLabel("Passwords do not match");
+        passwordMismatchLabel.setForeground(Color.RED); // Couleur du texte en rouge
+        passwordMismatchLabel.setVisible(false); // Cacher le message au départ
         JCheckBox checkBoxIsNeeder = new JCheckBox("Needer");
         JCheckBox checkBoxIsVolunteer = new JCheckBox("Volunteer");
         JCheckBox checkBoxIsValidator = new JCheckBox("Validator");
 
-        //Set the components properties.
-        labelTitle.setFont(labelTitle.getFont().deriveFont(20.0f));
+        // Propriétés des composants
+        labelTitle.setFont(labelTitle.getFont().deriveFont(24.0f));
         typePanel.setLayout(new BoxLayout(typePanel, BoxLayout.X_AXIS));
         formPanel.setLayout(new BoxLayout(formPanel, BoxLayout.Y_AXIS));
-        frame.getContentPane().add(formPanel, "North");
-        frame.getContentPane().add(validateButton, "South");
+        frame.getContentPane().add(formPanel, BorderLayout.CENTER);
+        frame.getContentPane().add(validateButton, BorderLayout.SOUTH);
         namePanel.setLayout(new BoxLayout(namePanel, BoxLayout.X_AXIS));
         labelFirstName.setBorder(BorderFactory.createEmptyBorder(0, 0, 0, 10));
         labelLastName.setBorder(BorderFactory.createEmptyBorder(0, 0, 0, 10));
+        checkBoxIsNeeder.setSelected(true); // Cocher par défaut
+        validateButton.setEnabled(false); // Désactiver le bouton de validation
 
-
-        //Add the components to the panel.
+        // Ajouter les composants au panneau
         typePanel.add(checkBoxIsNeeder);
         typePanel.add(checkBoxIsVolunteer);
         typePanel.add(checkBoxIsValidator);
@@ -53,7 +60,6 @@ public class SignUpView {
         namePanel.add(textFieldFirstName);
         namePanel.add(labelLastName);
         namePanel.add(textFieldLastName);
-
 
         formPanel.add(labelTitle);
         formPanel.add(namePanel);
@@ -64,8 +70,19 @@ public class SignUpView {
         formPanel.add(passwordField);
         formPanel.add(labelConfirmPassword);
         formPanel.add(confirmPasswordField);
+        formPanel.add(passwordMismatchLabel); // Ajouter le label d'incohérence
 
-        //Add event listeners.
+        // Ajouter des espacements
+        formPanel.add(Box.createVerticalStrut(10));
+
+        // Ajouter un panneau pour aligner le bouton au centre
+        JPanel buttonPanel = new JPanel();
+        buttonPanel.setLayout(new FlowLayout(FlowLayout.CENTER));
+        buttonPanel.add(validateButton);
+
+        // Ajouter le panneau de boutons à la fin du formulaire
+        formPanel.add(buttonPanel);
+
         checkBoxIsNeeder.addActionListener(actionEvent -> {
             if (checkBoxIsNeeder.isSelected()) {
                 checkBoxIsVolunteer.setSelected(false);
@@ -87,13 +104,44 @@ public class SignUpView {
             }
         });
 
-        confirmPasswordField.addActionListener(actionEvent -> {
-            if (!Objects.equals(Arrays.toString(passwordField.getPassword()), Arrays.toString(confirmPasswordField.getPassword()))) {
-                JOptionPane.showMessageDialog(frame, "Passwords don't match");
+        // Ajouter des écouteurs d'événements
+        DocumentListener documentListener = new DocumentListener() {
+            @Override
+            public void insertUpdate(DocumentEvent e) {
+                checkIfFieldsAreFilled();
             }
-        });
 
-        validateButton.addActionListener( actionEvent -> {
+            @Override
+            public void removeUpdate(DocumentEvent e) {
+                checkIfFieldsAreFilled();
+            }
+
+            @Override
+            public void changedUpdate(DocumentEvent e) {
+                checkIfFieldsAreFilled();
+            }
+
+            private void checkIfFieldsAreFilled() {
+                String firstName = textFieldFirstName.getText();
+                String lastName = textFieldLastName.getText();
+                String email = textFieldEmail.getText();
+                char[] password = passwordField.getPassword();
+                char[] confirmPassword = confirmPasswordField.getPassword();
+
+                boolean fieldsFilled = !firstName.isEmpty() && !lastName.isEmpty() && !email.isEmpty() &&
+                        password.length > 0 && confirmPassword.length > 0;
+
+                validateButton.setEnabled(fieldsFilled && Arrays.equals(password, confirmPassword));
+            }
+        };
+
+        textFieldFirstName.getDocument().addDocumentListener(documentListener);
+        textFieldLastName.getDocument().addDocumentListener(documentListener);
+        textFieldEmail.getDocument().addDocumentListener(documentListener);
+        passwordField.getDocument().addDocumentListener(documentListener);
+        confirmPasswordField.getDocument().addDocumentListener(documentListener);
+
+        validateButton.addActionListener(actionEvent -> {
             try {
                 String ret = Controller.createNewUser(textFieldFirstName.getText(),
                         textFieldLastName.getText(),
@@ -104,12 +152,12 @@ public class SignUpView {
                         checkBoxIsVolunteer.isSelected(),
                         checkBoxIsValidator.isSelected()
                 );
-                if (ret.equals("User created")) {
-                    JOptionPane.showMessageDialog(frame, ret);
+                if (ret.equals("User successfully created")) {
+                    JOptionPane.showMessageDialog(frame, "User created successfully");
                     frame.dispose();
                     LogInView.create();
                 } else if (ret.equals("User already exists")) {
-                    JOptionPane.showMessageDialog(frame, "Travel to Login Page", ret,1);
+                    JOptionPane.showMessageDialog(frame, "User already exists. Redirecting to Login Page");
                     frame.dispose();
                     LogInView.create();
                 }
@@ -118,9 +166,7 @@ public class SignUpView {
             }
         });
 
-
-
-        //Display the window.
+        // Afficher la fenêtre.
         frame.setVisible(true);
     }
 }

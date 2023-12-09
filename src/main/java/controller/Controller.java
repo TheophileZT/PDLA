@@ -59,7 +59,7 @@ public class Controller {
             preparedStatement.setString(4, userType);
             preparedStatement.setString(5, password);
             preparedStatement.executeUpdate();
-            userCreationStatus = "User sucessfully created";
+            userCreationStatus = "User successfully created";
         } catch (SQLException e) {
             e.printStackTrace();
             userCreationStatus = "User creation failed";
@@ -90,7 +90,7 @@ public class Controller {
             preparedStatement.setString(3, date);
             preparedStatement.setInt(4, idUser);
             preparedStatement.executeUpdate();
-            missionCreationStatus = "Mission sucessfully created";
+            missionCreationStatus = "Mission successfully created";
         } catch (SQLException e) {
             e.printStackTrace();
             missionCreationStatus = "Mission creation failed";
@@ -112,5 +112,41 @@ public class Controller {
             e.printStackTrace();
         }
         return missions;
+    }
+
+    public static ArrayList<Mission> getMissionsToValidate() {
+        ArrayList<Mission> missions = new ArrayList<Mission>();
+        try {
+            String getMissionsRequest = "SELECT * FROM MISSIONS WHERE Status = 'Pending'";
+            ResultSet missionsRS = bdd.state.executeQuery(getMissionsRequest);
+            while (missionsRS.next()) {
+                Mission mission = new Mission(missionsRS.getInt("IdMission"), missionsRS.getString("Title"), missionsRS.getString("Description"), missionsRS.getString("Date"), missionsRS.getInt("IdNeeder"), missionsRS.getString("Status"));
+                missions.add(mission);
+            }
+        }
+        catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return missions;
+    }
+
+    public static void acceptMission(int idMission) {
+        try {
+            String acceptMissionQuery = "UPDATE MISSIONS SET Status = 'Accepted' WHERE IdMission = '" + idMission + "'";
+            bdd.state.executeUpdate(acceptMissionQuery);
+        }
+        catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static void refuseMission(int idMission) {
+        try {
+            String refuseMissionQuery = "UPDATE MISSIONS SET Status = 'Refused' WHERE IdMission = '" + idMission + "'";
+            bdd.state.executeUpdate(refuseMissionQuery);
+        }
+        catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 }
