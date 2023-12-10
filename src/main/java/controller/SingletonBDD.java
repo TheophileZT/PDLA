@@ -5,6 +5,9 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.sql.Statement;
 
+/**
+ * SingletonBDD is a singleton class that creates a unique connection to the database
+ */
 public class SingletonBDD {
 
     String url = "jdbc:mysql://srv-bdens.insa-toulouse.fr:3306/projet_gei_011";
@@ -13,12 +16,19 @@ public class SingletonBDD {
 
     private static SingletonBDD instance = null;
     Statement state = null;
-    Connection conn = null;
+    Connection conn;
 
+    /**
+     * Constructor of the SingletonBDD class
+     */
     private SingletonBDD() {
         conn = createConnection();
     }
-    
+
+    /**
+     * Creates a connection to the database
+     * @return the connection to the database
+     */
     private Connection createConnection() {
         try {
             // Load the JDBC driver
@@ -31,6 +41,10 @@ public class SingletonBDD {
         return conn;
     }
 
+    /**
+     * Returns the singleton instance of the connection to the database
+     * @return the singleton instance
+     */
     public static SingletonBDD getInstance() {
         if (instance == null) {
             instance = new SingletonBDD();

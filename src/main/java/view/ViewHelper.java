@@ -9,25 +9,35 @@ import java.awt.*;
 import java.util.ArrayList;
 
 public class ViewHelper {
+
+    /**
+     * Create the GUI for the helper view
+     * @param idHelper the id of the helper
+     */
     public static void create(int idHelper) {
         JFrame frame = new JFrame("HelperFrame");
         frame.setExtendedState(JFrame.MAXIMIZED_BOTH);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
+        // Create and set up the content pane.
         JPanel mainPanel = new JPanel();
         mainPanel.setLayout(new BorderLayout());
 
+        // Create and set up the top panel with title
         JPanel topPanel = new JPanel();
         topPanel.setLayout(new FlowLayout(FlowLayout.CENTER));
         JLabel labelTitle = new JLabel("Accepted Missions", JLabel.CENTER);
         topPanel.add(labelTitle);
 
+        // Create and set up the bottom panel with buttons
         JPanel missionPanel = new JPanel();
         missionPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
         missionPanel.setLayout(new GridLayout(0, 2, 10, 10)); // Utilisation de GridLayout avec espacement
 
+        // Get missions
         ArrayList<Mission> missions = Controller.getAcceptedOrAssignedMission(idHelper);
 
+        // Create mission cards
         for (Mission mission : missions) {
             JPanel missionCard = new JPanel();
             missionCard.setLayout(new BorderLayout());
@@ -88,9 +98,11 @@ public class ViewHelper {
             missionPanel.add(missionCard);
         }
 
+        // Create and set up the scroll pane if there are too many missions
         JScrollPane scrollPane = new JScrollPane(missionPanel);
         scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
 
+        // Create and set up the bottom panel with button
         JPanel bottomPanel = new JPanel();
         bottomPanel.setLayout(new FlowLayout(FlowLayout.CENTER));
         JButton buttonLogout = new JButton("Logout");

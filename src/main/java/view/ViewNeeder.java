@@ -9,27 +9,38 @@ import java.awt.*;
 import java.util.ArrayList;
 
 public class ViewNeeder {
+
+    /**
+     * Create the GUI for the needer view
+     * @param userId the id of the needer
+     */
     public static void create(int userId) {
         JFrame frame = new JFrame("NeederFrame");
         frame.setExtendedState(JFrame.MAXIMIZED_BOTH);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
+        // Create panels
         JPanel mainPanel = new JPanel();
         JPanel topPanel = new JPanel();
         JPanel missionPanel = new JPanel();
         JPanel bottomPanel = new JPanel();
 
+        // Set layout of panels
+        mainPanel.setLayout(new BoxLayout(mainPanel, BoxLayout.Y_AXIS));
+        topPanel.setLayout(new FlowLayout(FlowLayout.CENTER));
+        missionPanel.setLayout(new GridLayout(0, 2));
+        bottomPanel.setLayout(new FlowLayout(FlowLayout.CENTER));
+        missionPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+        missionPanel.setMaximumSize(new Dimension(1000, 1000));
+
+        // Create top panel
         JLabel labelTitle = new JLabel("My Missions", JLabel.CENTER);
         JButton buttonAddMission = new JButton("Add Mission");
 
-        mainPanel.setLayout(new BoxLayout(mainPanel, BoxLayout.Y_AXIS));
-        topPanel.setLayout(new FlowLayout(FlowLayout.CENTER));
-        bottomPanel.setLayout(new FlowLayout(FlowLayout.CENTER));
-
+        // Get missions of needer
         ArrayList<Mission> missions = Controller.getMissionsOfNeeder(userId);
 
-        missionPanel.setLayout(new GridLayout(0, 2));
-
+        // Create mission cards
         for (Mission mission : missions) {
             JPanel missionCard = new JPanel();
             missionCard.setLayout(new BoxLayout(missionCard, BoxLayout.Y_AXIS));
@@ -45,6 +56,7 @@ public class ViewNeeder {
             JLabel labelStatus = new JLabel("Status: " + mission.getStatus());
             JLabel labelIDHelper= new JLabel();
 
+            // Set color of status
             if (mission.getStatus()==Status.Assigned) {
                 labelStatus.setForeground(Color.BLUE);
             } else if (mission.getStatus()== Status.Done) {
@@ -55,6 +67,7 @@ public class ViewNeeder {
                 labelStatus.setForeground(Color.ORANGE);
             }
 
+            // Set helper name if the mission is assigned
             if (mission.getIdHelper() == 0) {
                 labelIDHelper.setText("Helper: Not assigned");
             } else {
@@ -72,19 +85,18 @@ public class ViewNeeder {
             missionPanel.add(missionCard);
         }
 
-        missionPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
-        missionPanel.setMaximumSize(new Dimension(1000, 1000));
-
+        // Create scroll pane if there are too many missions
         JScrollPane scrollPane = new JScrollPane(missionPanel);
         scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
 
-
+        // Create bottom panel
         JButton buttonLogout = new JButton("Logout");
         buttonLogout.addActionListener(e -> {
             LogInView.create();
             frame.dispose();
         });
 
+        // Add panels to main panel
         frame.getContentPane().add(mainPanel);
         mainPanel.add(topPanel);
         mainPanel.add(scrollPane);
@@ -93,7 +105,7 @@ public class ViewNeeder {
         topPanel.add(buttonAddMission);
         bottomPanel.add(buttonLogout);
 
-        // Gestionnaire d'événements pour le bouton "Add Mission"
+        // Event listeners
         buttonAddMission.addActionListener(e -> {
             MissionView.add(userId);
             frame.dispose();

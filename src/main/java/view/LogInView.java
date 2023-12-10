@@ -9,13 +9,16 @@ import java.util.Arrays;
 
 public class LogInView {
 
+    /**
+     * Create the GUI and show it for the login view.
+     */
     public static void create() {
         // Create and set up the window.
         JFrame frame = new JFrame("Login");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setExtendedState(JFrame.MAXIMIZED_BOTH);
         frame.setLayout(new BorderLayout());
-        frame.getContentPane().setBackground(new Color(200, 200, 200)); // Couleur de fond
+        frame.getContentPane().setBackground(new Color(200, 200, 200));
 
         // Panel for form components
         JPanel formPanel = new JPanel();
@@ -93,6 +96,12 @@ public class LogInView {
         frame.setVisible(true);
     }
 
+    /**
+     * Action performed when the login button is clicked or the enter key is pressed
+     * @param textFieldEmail the email text field
+     * @param passwordField the password text field
+     * @param frame the frame
+     */
     private static void actionLogin(JTextField textFieldEmail, JPasswordField passwordField, JFrame frame) {
         String email = textFieldEmail.getText();
         String password = Arrays.toString(passwordField.getPassword());

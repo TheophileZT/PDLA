@@ -5,6 +5,9 @@ import java.awt.*;
 
 public class ViewStart {
 
+    /**
+     * Create the GUI for the start page.
+     */
     public static void create() {
         // Create and set up the window.
         JFrame frame = new JFrame("Login");
@@ -21,7 +24,7 @@ public class ViewStart {
         JButton buttonLogIn = new JButton("Log In");
         JButton buttonSignUp = new JButton("Sign Up");
 
-        // Ajuster la taille des boutons
+        // Adjust buttons size
         Dimension buttonSize = new Dimension(150, 40);
         buttonLogIn.setPreferredSize(buttonSize);
         buttonSignUp.setPreferredSize(buttonSize);
@@ -36,13 +39,12 @@ public class ViewStart {
         frame.getContentPane().add(panelButtons, BorderLayout.CENTER);
 
         // Style the buttons to match the provided style
-        buttonLogIn.setBackground(new Color(46, 139, 87)); // SeaGreen
+        buttonLogIn.setBackground(Color.GREEN);
         buttonLogIn.setForeground(Color.WHITE);
-        buttonSignUp.setBackground(new Color(255, 69, 0)); // Red-Orange
+        buttonSignUp.setBackground(Color.ORANGE); // Red-Orange
         buttonSignUp.setForeground(Color.WHITE);
 
-        // Display the window.
-        frame.setVisible(true);
+
 
         // Action listeners
         buttonSignUp.addActionListener(e -> {
@@ -54,5 +56,8 @@ public class ViewStart {
             LogInView.create();
             frame.dispose();
         });
+
+        // Display the window.
+        frame.setVisible(true);
     }
 }

@@ -11,12 +11,15 @@ import java.util.Arrays;
 
 public class SignUpView {
 
+    /**
+     * Create the GUI and show it for the sign-up view.
+     */
     public static void create() {
         JFrame frame = new JFrame("SignUpFrame");
-        frame.setExtendedState(JFrame.MAXIMIZED_BOTH); // Mettre en plein écran
+        frame.setExtendedState(JFrame.MAXIMIZED_BOTH);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
-        // Créer tous les composants
+        // Create components
         JPanel typePanel = new JPanel();
         JPanel formPanel = new JPanel();
         JPanel namePanel = new JPanel();
@@ -36,10 +39,10 @@ public class SignUpView {
         passwordMismatchLabel.setForeground(Color.RED); // Couleur du texte en rouge
         passwordMismatchLabel.setVisible(false); // Cacher le message au départ
         JCheckBox checkBoxIsNeeder = new JCheckBox("Needer");
-        JCheckBox checkBoxIsVolunteer = new JCheckBox("Volunteer");
+        JCheckBox checkBoxIsHelper = new JCheckBox("Helper");
         JCheckBox checkBoxIsValidator = new JCheckBox("Validator");
 
-        // Propriétés des composants
+        // Component properties
         labelTitle.setFont(labelTitle.getFont().deriveFont(24.0f));
         typePanel.setLayout(new BoxLayout(typePanel, BoxLayout.X_AXIS));
         formPanel.setLayout(new BoxLayout(formPanel, BoxLayout.Y_AXIS));
@@ -48,12 +51,12 @@ public class SignUpView {
         namePanel.setLayout(new BoxLayout(namePanel, BoxLayout.X_AXIS));
         labelFirstName.setBorder(BorderFactory.createEmptyBorder(0, 0, 0, 10));
         labelLastName.setBorder(BorderFactory.createEmptyBorder(0, 0, 0, 10));
-        checkBoxIsNeeder.setSelected(true); // Cocher par défaut
-        validateButton.setEnabled(false); // Désactiver le bouton de validation
+        checkBoxIsNeeder.setSelected(true);
+        validateButton.setEnabled(false);
 
-        // Ajouter les composants au panneau
+        // Add components to panels
         typePanel.add(checkBoxIsNeeder);
-        typePanel.add(checkBoxIsVolunteer);
+        typePanel.add(checkBoxIsHelper);
         typePanel.add(checkBoxIsValidator);
 
         namePanel.add(labelFirstName);
@@ -70,28 +73,28 @@ public class SignUpView {
         formPanel.add(passwordField);
         formPanel.add(labelConfirmPassword);
         formPanel.add(confirmPasswordField);
-        formPanel.add(passwordMismatchLabel); // Ajouter le label d'incohérence
+        formPanel.add(passwordMismatchLabel);
 
-        // Ajouter des espacements
+        // Add spacing between components
         formPanel.add(Box.createVerticalStrut(10));
 
-        // Ajouter un panneau pour aligner le bouton au centre
+        // Add a panel for the buttons
         JPanel buttonPanel = new JPanel();
         buttonPanel.setLayout(new FlowLayout(FlowLayout.CENTER));
         buttonPanel.add(validateButton);
 
-        // Ajouter le panneau de boutons à la fin du formulaire
         formPanel.add(buttonPanel);
 
+        // Event listeners
         checkBoxIsNeeder.addActionListener(actionEvent -> {
             if (checkBoxIsNeeder.isSelected()) {
-                checkBoxIsVolunteer.setSelected(false);
+                checkBoxIsHelper.setSelected(false);
                 checkBoxIsValidator.setSelected(false);
             }
         });
 
-        checkBoxIsVolunteer.addActionListener(actionEvent -> {
-            if (checkBoxIsVolunteer.isSelected()) {
+        checkBoxIsHelper.addActionListener(actionEvent -> {
+            if (checkBoxIsHelper.isSelected()) {
                 checkBoxIsNeeder.setSelected(false);
                 checkBoxIsValidator.setSelected(false);
             }
@@ -100,11 +103,11 @@ public class SignUpView {
         checkBoxIsValidator.addActionListener(actionEvent -> {
             if (checkBoxIsValidator.isSelected()) {
                 checkBoxIsNeeder.setSelected(false);
-                checkBoxIsVolunteer.setSelected(false);
+                checkBoxIsHelper.setSelected(false);
             }
         });
 
-        // Ajouter des écouteurs d'événements
+        // Document listener that verify that all fields are filled
         DocumentListener documentListener = new DocumentListener() {
             @Override
             public void insertUpdate(DocumentEvent e) {
@@ -121,6 +124,7 @@ public class SignUpView {
                 checkIfFieldsAreFilled();
             }
 
+            // Check if all fields are filled and if the passwords match
             private void checkIfFieldsAreFilled() {
                 String firstName = textFieldFirstName.getText();
                 String lastName = textFieldLastName.getText();
@@ -135,6 +139,7 @@ public class SignUpView {
             }
         };
 
+        // Add the document listener to all fields
         textFieldFirstName.getDocument().addDocumentListener(documentListener);
         textFieldLastName.getDocument().addDocumentListener(documentListener);
         textFieldEmail.getDocument().addDocumentListener(documentListener);
@@ -148,7 +153,7 @@ public class SignUpView {
                         textFieldEmail.getText(),
                         Arrays.toString(passwordField.getPassword()),
                         checkBoxIsNeeder.isSelected(),
-                        checkBoxIsVolunteer.isSelected(),
+                        checkBoxIsHelper.isSelected(),
                         checkBoxIsValidator.isSelected()
                 );
                 if (ret.equals("User successfully created")) {
