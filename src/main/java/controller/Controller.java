@@ -207,4 +207,29 @@ public class Controller {
         }
         return completeMissionStatus;
     }
+
+    public static int getIdOfUser(String email) {
+        int id = 0;
+        try {
+            String getIdRequest = "SELECT IdUser FROM USER WHERE Email = '" + email + "'";
+            ResultSet idRS = bdd.state.executeQuery(getIdRequest);
+            while (idRS.next()) {
+                id = idRS.getInt("IdUser");
+            }
+        }
+        catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return id;
+    }
+
+    public static void deleteUserByName(String name) {
+        try {
+            String deleteUserQuery = "DELETE FROM USER WHERE UserFirstName = '" + name + "'";
+            bdd.state.executeUpdate(deleteUserQuery);
+        }
+        catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
 }
