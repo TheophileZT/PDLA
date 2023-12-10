@@ -232,4 +232,24 @@ public class Controller {
             e.printStackTrace();
         }
     }
+
+    public static void deleteUser(int testUserId) {
+        try {
+            String deleteUserQuery = "DELETE FROM USER WHERE IdUser = '" + testUserId + "'";
+            bdd.state.executeUpdate(deleteUserQuery);
+        }
+        catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static void deleteMission(int testMissionId) {
+        try {
+            String deleteMissionQuery = "DELETE FROM MISSIONS WHERE IdMission = '" + testMissionId + "'";
+            bdd.state.executeUpdate(deleteMissionQuery);
+        }
+        catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
 }
