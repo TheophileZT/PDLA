@@ -14,8 +14,6 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 
 public class ControllerTest {
 
-    static SingletonBDD bdd = SingletonBDD.getInstance();
-
     // Utilisez ces variables pour stocker les données de test
     private static final String testUserEmail = "testuser@example.com";
     private static final String testUserPassword = "testPassword";
@@ -25,7 +23,7 @@ public class ControllerTest {
     @BeforeAll
     public static void setUp() throws SQLException {
         // Ajoutez un utilisateur de test à la base de données
-        if (bdd.conn != null) {
+        if (Controller.bdd.conn != null) {
             String firstName = "Test";
             String lastName = "User";
             String email = testUserEmail;
@@ -44,14 +42,14 @@ public class ControllerTest {
     // Cette méthode s'exécute une fois après la fin de tous les tests
     @AfterAll
     public static void tearDown() {
-        if (bdd.conn != null) {
+        if (Controller.bdd.conn != null) {
             Controller.deleteUser(testUserId);
         }
     }
 
     @Test
     public void testCreateNewUser() throws SQLException {
-        if (bdd.conn != null) {
+        if (Controller.bdd.conn != null) {
             String firstName = "Test";
             String lastName = "User";
             String email = "testuser1@example.com";
@@ -71,7 +69,7 @@ public class ControllerTest {
     @Test
     public void testLogIn() throws SQLException {
         // Assuming there is a test user in the database with known credentials
-        if (bdd.conn != null) {
+        if (Controller.bdd.conn != null) {
             String email = "testuser@example.com";
             String password = "testPassword";
 
@@ -85,7 +83,7 @@ public class ControllerTest {
 
     @Test
     public void testCreateExistingUser() throws SQLException{
-        if (bdd.conn != null) {
+        if (Controller.bdd.conn != null) {
             String firstName = "Test";
             String lastName = "User";
             String email = "testuser@example.com";
@@ -124,7 +122,7 @@ public class ControllerTest {
 
     @Test
     public void testAcceptOrRefuseMission(){
-        if (bdd.conn != null) {
+        if (Controller.bdd.conn != null) {
             int idUser = testUserId;
 
             // Data for the test mission
