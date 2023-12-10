@@ -1,23 +1,24 @@
 package model;
 
 public class Mission {
-    private int idMission;
+    private final int idMission;
     private String title;
     private String description;
     private String date;
-    private int idNeeder;
+    private final int idNeeder;
 
     private int idHelper;
 
     private Status status;
 
-    public Mission(int idMission, String title, String description, String date, int idNeeder, String status) {
+    public Mission(int idMission, String title, String description, String date, int idNeeder, String status, int idHelper) {
         this.idMission = idMission;
         this.title = title;
         this.description = description;
         this.date = date;
         this.idNeeder = idNeeder;
         this.status = Status.valueOf(status);
+        this.idHelper = idHelper;
     }
 
     public int getIdMission() {
@@ -28,46 +29,21 @@ public class Mission {
         return title;
     }
 
-    public void setTitle(String title) {
-        this.title = title;
-    }
-
     public String getDescription() {
         return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
-    }
-
-    public int getIdNeeder() {
-        return idNeeder;
-    }
-
-    public String getDate() {
-        return date;
-    }
-
-    public void setDate(String date) {
-        this.date = date;
     }
 
     public Status getStatus() {
         return status;
     }
 
-    public void setStatus(Status status) {
-        this.status = status;
-    }
-
     public int getIdHelper() {
         return idHelper;
     }
 
-    public void setIdHelper(int idHelper) {
-        this.idHelper = idHelper;
+    public int getIdNeeder() {
+        return idNeeder;
     }
-
     public String getDateTime() {
         return date;
     }
@@ -83,4 +59,6 @@ public class Mission {
                 ", status=" + status +
                 '}';
     }
+
+
 }

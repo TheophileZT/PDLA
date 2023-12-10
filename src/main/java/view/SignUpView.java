@@ -145,7 +145,6 @@ public class SignUpView {
             try {
                 String ret = Controller.createNewUser(textFieldFirstName.getText(),
                         textFieldLastName.getText(),
-                        null,
                         textFieldEmail.getText(),
                         Arrays.toString(passwordField.getPassword()),
                         checkBoxIsNeeder.isSelected(),

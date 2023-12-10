@@ -2,6 +2,7 @@ package view;
 
 import controller.Controller;
 import model.Mission;
+import model.Status;
 
 import javax.swing.*;
 import java.awt.*;
@@ -42,7 +43,24 @@ public class ViewNeeder {
             }
             JLabel labelDateTime = new JLabel("Date: " + mission.getDateTime());
             JLabel labelStatus = new JLabel("Status: " + mission.getStatus());
-            JLabel labelIDHelper = new JLabel("Helper: " + mission.getIdHelper());
+            JLabel labelIDHelper= new JLabel();
+
+            if (mission.getStatus()==Status.Assigned) {
+                labelStatus.setForeground(Color.BLUE);
+            } else if (mission.getStatus()== Status.Done) {
+                labelStatus.setForeground(Color.GREEN);
+            } else if (mission.getStatus()==Status.Refused) {
+                labelStatus.setForeground(Color.RED);
+            } else if (mission.getStatus() == Status.Pending) {
+                labelStatus.setForeground(Color.ORANGE);
+            }
+
+            if (mission.getIdHelper() == 0) {
+                labelIDHelper.setText("Helper: Not assigned");
+            } else {
+                String name = Controller.getNameOfUser(mission.getIdHelper());
+                labelIDHelper.setText("Helper: " + name);
+            }
 
             missionCard.add(labelID);
             missionCard.add(labelTitleM);

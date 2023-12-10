@@ -109,7 +109,7 @@ public class LogInView {
                 frame.dispose();
                 switch (ret[1]) {
                     case "Needer" -> ViewNeeder.create(Integer.parseInt(ret[2]));
-                    case "Helper" -> ViewHelper.create();
+                    case "Helper" -> ViewHelper.create(Integer.parseInt(ret[2]));
                     case "Validator" -> ViewValidator.create();
                 }
             } else {

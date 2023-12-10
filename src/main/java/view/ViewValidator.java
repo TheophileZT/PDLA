@@ -36,19 +36,19 @@ public class ViewValidator {
             infoMissionPanel.setLayout(new BoxLayout(infoMissionPanel, BoxLayout.Y_AXIS));
 
             JLabel labelID = new JLabel("ID: " + mission.getIdMission());
+            JLabel labelNeeder = new JLabel("Needer: " + Controller.getNameOfUser(mission.getIdNeeder()));
             JLabel labelTitleM = new JLabel("Title: " + mission.getTitle());
             JLabel descriptionLabel = new JLabel("Desc: " + mission.getDescription());
             if (descriptionLabel.getText().length() > 100) {
                 descriptionLabel.setText(descriptionLabel.getText().substring(0, 100) + "...");
             }
             JLabel labelDateTime = new JLabel("Date: " + mission.getDateTime());
-            JLabel labelStatus = new JLabel("Status: " + mission.getStatus());
 
             infoMissionPanel.add(labelID);
+            infoMissionPanel.add(labelNeeder);
             infoMissionPanel.add(labelTitleM);
             infoMissionPanel.add(descriptionLabel);
             infoMissionPanel.add(labelDateTime);
-            infoMissionPanel.add(labelStatus);
 
             missionCard.add(infoMissionPanel, BorderLayout.CENTER);
 

@@ -13,7 +13,14 @@ public enum Status {
         this.value = value;
     }
 
-    public int getValue() {
-        return value;
+    public String toString() {
+        return switch (value) {
+            case 0 -> "Pending";
+            case 1 -> "Accepted";
+            case 2 -> "Assigned";
+            case 3 -> "Refused";
+            case 4 -> "Done";
+            default -> "Unknown";
+        };
     }
 }

@@ -64,9 +64,13 @@ public class MissionView {
             SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
             String dateTime = dateFormat.format(calendarDate.getTime());
             System.out.println("Selected DateTime: " + dateTime);
-            Controller.createNewMission(textFieldTitle.getText(), textFieldDescription.getText(), dateTime, idUser);
-            frame.dispose();
-            ViewNeeder.create(idUser);
+            String ret = Controller.createNewMission(textFieldTitle.getText(), textFieldDescription.getText(), dateTime, idUser);
+            if (ret.equals("Mission successfully created")) {
+                frame.dispose();
+                ViewNeeder.create(idUser);
+            } else {
+                JOptionPane.showMessageDialog(frame, ret);
+            }
         });
 
         frame.setVisible(true);

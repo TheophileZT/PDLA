@@ -34,7 +34,7 @@ public class Controller {
         return logStatusAndUser;
     }
     
-    public static String createNewUser(String firstName, String lastName, String BirthDate, String email, String password, boolean isNeeder, boolean isHelper, boolean isValidator) throws SQLException{
+    public static String createNewUser(String firstName, String lastName, String email, String password, boolean isNeeder, boolean isHelper, boolean isValidator) throws SQLException{
         String userCreationStatus = "";
         ResultSet userExists = getUserData(email);
         if (userExists.next()){
@@ -55,7 +55,6 @@ public class Controller {
             preparedStatement.setString(1, firstName);
             preparedStatement.setString(2, lastName);
             preparedStatement.setString(3, email);
-            //BirthDate not implemented yet
             preparedStatement.setString(4, userType);
             preparedStatement.setString(5, password);
             preparedStatement.executeUpdate();
@@ -104,7 +103,7 @@ public class Controller {
             String getMissionsRequest = "SELECT * FROM MISSIONS WHERE IdNeeder = '" + idNeeder + "'";
             ResultSet missionsRS = bdd.state.executeQuery(getMissionsRequest);
             while (missionsRS.next()) {
-                Mission mission = new Mission(missionsRS.getInt("IdMission"), missionsRS.getString("Title"), missionsRS.getString("Description"), missionsRS.getString("Date"), missionsRS.getInt("IdNeeder"), missionsRS.getString("Status"));
+                Mission mission = new Mission(missionsRS.getInt("IdMission"), missionsRS.getString("Title"), missionsRS.getString("Description"), missionsRS.getString("Date"), missionsRS.getInt("IdNeeder"), missionsRS.getString("Status"), missionsRS.getInt("IdHelper"));
                 missions.add(mission);
             }
         }
@@ -120,7 +119,7 @@ public class Controller {
             String getMissionsRequest = "SELECT * FROM MISSIONS WHERE Status = 'Pending'";
             ResultSet missionsRS = bdd.state.executeQuery(getMissionsRequest);
             while (missionsRS.next()) {
-                Mission mission = new Mission(missionsRS.getInt("IdMission"), missionsRS.getString("Title"), missionsRS.getString("Description"), missionsRS.getString("Date"), missionsRS.getInt("IdNeeder"), missionsRS.getString("Status"));
+                Mission mission = new Mission(missionsRS.getInt("IdMission"), missionsRS.getString("Title"), missionsRS.getString("Description"), missionsRS.getString("Date"), missionsRS.getInt("IdNeeder"), missionsRS.getString("Status"), missionsRS.getInt("IdHelper"));
                 missions.add(mission);
             }
         }
@@ -148,5 +147,64 @@ public class Controller {
         catch (SQLException e) {
             e.printStackTrace();
         }
+    }
+
+    public static ArrayList<Mission> getAcceptedOrAssignedMission(int idHelper) {
+        ArrayList<Mission> missions = new ArrayList<Mission>();
+        try {
+            String getMissionsRequest = "SELECT * FROM MISSIONS WHERE Status = 'Accepted' OR Status = 'Assigned' AND IdHelper = '" + idHelper + "'";
+            ResultSet missionsRS = bdd.state.executeQuery(getMissionsRequest);
+            while (missionsRS.next()) {
+                Mission mission = new Mission(missionsRS.getInt("IdMission"), missionsRS.getString("Title"), missionsRS.getString("Description"), missionsRS.getString("Date"), missionsRS.getInt("IdNeeder"), missionsRS.getString("Status"), missionsRS.getInt("IdHelper"));
+                missions.add(mission);
+            }
+        }
+        catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return missions;
+    }
+
+    public static String assignMission(int idMission, int idHelper) {
+        String assignMissionStatus = "";
+        try {
+            String assignMissionQuery = "UPDATE MISSIONS SET IdHelper = '" + idHelper + "', Status = 'Assigned' WHERE IdMission = '" + idMission + "'";
+            bdd.state.executeUpdate(assignMissionQuery);
+            assignMissionStatus = "Mission successfully assigned";
+        }
+        catch (SQLException e) {
+            e.printStackTrace();
+            assignMissionStatus = "Mission assignation failed";
+        }
+        return assignMissionStatus;
+    }
+
+    public static String getNameOfUser(int idHelper) {
+        String name = "";
+        try {
+            String getNameRequest = "SELECT UserFirstName, UserLastName FROM USER WHERE IdUser = '" + idHelper + "'";
+            ResultSet nameRS = bdd.state.executeQuery(getNameRequest);
+            while (nameRS.next()) {
+                name = nameRS.getString("UserFirstName") + " " + nameRS.getString("UserLastName");
+            }
+        }
+        catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return name;
+    }
+
+    public static String completeMission(int idMission) {
+        String completeMissionStatus = "";
+        try {
+            String completeMissionQuery = "UPDATE MISSIONS SET Status = 'Done' WHERE IdMission = '" + idMission + "'";
+            bdd.state.executeUpdate(completeMissionQuery);
+            completeMissionStatus = "Mission successfully completed";
+        }
+        catch (SQLException e) {
+            e.printStackTrace();
+            completeMissionStatus = "Mission completion failed";
+        }
+        return completeMissionStatus;
     }
 }
