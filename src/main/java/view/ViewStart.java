@@ -17,7 +17,7 @@ public class ViewStart {
 
         // Panel for buttons
         JPanel panelButtons = new JPanel(new FlowLayout());
-        JLabel labelText = new JLabel("Welcome to \"name of the app\"!");
+        JLabel labelText = new JLabel("Welcome to Project: Just In Time!");
         labelText.setHorizontalAlignment(JLabel.CENTER);
         labelText.setFont(labelText.getFont().deriveFont(20.0f)); // Ajuster la taille de la police
         labelText.setBorder(BorderFactory.createEmptyBorder(50, 10, 0, 10)); // Ajuster les marges
